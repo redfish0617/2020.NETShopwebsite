@@ -1,0 +1,31 @@
+﻿@using EC_Back.Models.Login
+@model Login
+@{
+    ViewBag.Title = "登入";
+    Layout = null;
+}
+<title>管理者登入</title>
+<br />
+<header>
+
+    <h1 align="center">管理者登入</h1>
+</header>
+<br />
+<br />
+<body>
+    <table width="400" align="center">
+        <tr>
+            <td>
+                @*使用Model建立頁面*@
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <b>@Html.EditorForModel()</b>
+                    <button type="submit">登入</button>
+                }
+            </td>
+        </tr>
+    </table>
+</body>
+
+

@@ -1,0 +1,40 @@
+﻿@model final.Models.Commodity
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>商品資訊</h2>
+<div>
+    <div class="row">
+        <div class="col-lg-4">
+            <dl class="thumbnail">
+
+                <dt>名稱</dt>
+                <dd>@Html.DisplayFor(model => model.Name)</dd>
+
+                <dt>描述</dt>
+                <dd>@Html.DisplayFor(model => model.Help)</dd>
+
+                <dt>售價</dt>
+                <dd>@Html.DisplayFor(model => model.Price)</dd>
+
+                <dt>庫存數量</dt>
+                <dd>@Html.DisplayFor(model => model.Inventory)</dd>
+
+                <dt>賣家</dt>
+                <dd>@Html.DisplayFor(model => model.Owner)</dd>
+            </dl>
+        </div>
+    </div>
+    @Html.ActionLink("回首頁", "Index", null, new { @class = "btn btn-default" })
+</div>
+
+       
+
+
+
+
+    
+
+

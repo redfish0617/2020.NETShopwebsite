@@ -1,0 +1,1 @@
+﻿UPDATE [dbo].[Order] SET State = 'false' WHERE State ='true'

@@ -1,0 +1,41 @@
+﻿@model List<final.Models.Commodity>
+@{
+    ViewBag.Title = "購物首頁";
+    var UserName = User.Identity.Name;
+}
+
+<h1 align="center">商品列表</h1>
+
+
+
+<div class="row">
+    @foreach (var product in this.Model)
+    {
+        <div class="col-sm-6 col-md-4">
+            <div class="thumbnail" style="background-color:ghostwhite">
+                <div class="caption">
+                    <h2 >@product.Name</h2>
+                    <p>@product.Help</p>
+                    <p>售價：@product.Price</p>
+                    <p>庫存:@product.Inventory</p>
+                    <p>
+                        @*檢查是否有庫存 無庫存不提供加入購物車服務*@
+                        @if (product.Inventory == 0)
+                        {
+                            <a class="btn btn-danger">商品已售完</a>
+                            <a href="@Url.Action("Details", new { id = product.Id })" class="btn btn-info" role="button">詳細資訊</a>
+                        }
+                        else
+                        {
+                            <a onclick="AddToCart('@product.Id','@product.Name','@product.Help','@product.Inventory','@product.Owner','@product.Price')" href="javascript:void(0);"
+                               class="btn btn-primary" role="button">加入購物車</a>
+                            <a href="@Url.Action("Details", new { id = product.Id})" class="btn btn-info" role="button">詳細資訊</a>
+                        }
+
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<script charset="utf-8"></script>

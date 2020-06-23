@@ -1,0 +1,102 @@
+﻿@model final.Models.Order
+@{
+    ViewBag.Title = "MyOrderDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>訂單明細</h1>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <hr />
+        @*訂單ID*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.Id, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            </div>
+        </div>
+
+        @*買家*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.Buyer, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Buyer, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            </div>
+        </div>
+
+        @*總價格*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            </div>
+        </div>
+
+        @*收件人地址*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.ReceiverAddress, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ReceiverAddress, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            </div>
+        </div>
+
+        @*商品內容*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Content, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            </div>
+        </div>
+
+         @*是否出貨*@
+         <div class="form-group">
+             @Html.LabelFor(model => model.State, htmlAttributes: new { @class = "control-label col-md-2" })
+             <div class="col-md-10">
+                 @Html.EditorFor(model => model.State, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+             </div>
+         </div>
+
+        @*檢查是否出貨*@
+         <div class="col-md-offset-2 col-md-10">
+             @if (Model.State == "false")
+             {
+                <input type="submit" value="訂單取消" id="cancel" class="btn btn-danger"/>
+             }
+             else
+             {
+                <input type="submit" value="訂單取消" id="cancel" class="btn btn-danger" disabled/>
+             }          
+         </div>
+
+      
+        @*回訂單首頁*@
+        <div class="col-md-offset-2 col-md-10">
+            @Html.ActionLink("回訂單", "Index", "ManageOrder", new { @class = "btn btn-default" })
+        </div>
+    </div>
+}
+
+
+
+<script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
+@*訂單取消傳送LineNotify*@
+@section scripts{
+    <script>
+    $(document).ready(function () {
+        $('#cancel').on("click", function () {
+            $.ajax({
+                url: '@Url.Action("SendMessage")',
+                type: 'POST',
+                contentType: "application/json",
+                cache: false,
+                dataType: "html",
+                data: "{ Message:'" + "訂單編號" +"@Model.Id" + "取消成功" + "'}",
+                async: false,
+                success: alert('訂單編號:' + "@Model.Id" + '取消成功'),
+            })
+        })
+    })
+    </script>
+}
+

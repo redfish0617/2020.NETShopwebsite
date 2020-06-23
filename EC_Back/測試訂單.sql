@@ -1,0 +1,1 @@
+﻿INSERT INTO [dbo].[Order](OrderId,Buyer,Content,Price,State)VALUES('456','acds0933','橡皮擦','12','false')

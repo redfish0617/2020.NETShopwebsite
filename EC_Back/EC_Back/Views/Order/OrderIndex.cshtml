@@ -1,0 +1,39 @@
+﻿@model List<EC_Back.Models.Order>
+@{
+    ViewBag.Title = "OrderIndex";
+}
+
+<h2>訂單查詢</h2>
+@if (ViewBag.Result != null)
+{
+    <h4 class="text-info">@ViewBag.Result</h4>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>訂單編號</th>
+            <th>是否出貨</th>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in this.Model)
+        {
+            <tr>
+                <!--表格呈現垂直置中-->
+                <td style="vertical-align:middle">@item.Id</td>
+                <td style="vertical-align:middle">@item.State</td>
+                <td>
+                    @Html.ActionLink("訂單明細", "StateCommit", "Order", new { id = item.Id }, new { @class = "btn btn-info" })
+                    @using (Html.BeginForm("Delete", "Order", FormMethod.Post, new { @class = "Delete" }))
+                    {
+                        @Html.Hidden("Id", item.Id)
+                        <input type="submit" value="訂單刪除" class="btn btn-danger" />
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

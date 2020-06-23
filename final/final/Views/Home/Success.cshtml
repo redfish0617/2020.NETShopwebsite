@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewBag.Title = "Success";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<img src="https://i.imgur.com/oukPlLS.gif">
+<div>
+    @Html.ActionLink("回首頁", "Index", "Home", new { @class = "btn btn-default" })
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
+@*訂單建立傳送LineNotify*@
+@section scripts{
+    <script>
+                $(document).ready(function () {
+                    $.ajax({
+                                url: '@Url.Action("SendMessage")',
+                                type: 'POST',
+                                contentType: "application/json",
+                                cache: false,
+                                dataType: "html",
+                                data: "{ Message:'" + "訂單編號" + "@ViewBag.OrderId" + "付款成功" + "'}",
+                                async: false,
+                    }).done(
+                         $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("ClearCart", "Cart")',
+                            data: {}
+                          })
+                            .done(function (msg) {
+                            //將回傳的購物車頁面 填入 li#Cart
+                            $('li#Cart').html(msg);
+                            })
+                         )                       
+                })
+    </script>
+}

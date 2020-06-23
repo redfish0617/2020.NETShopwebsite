@@ -1,0 +1,48 @@
+﻿@model List<EC_Back.Models.Commodity>
+@{
+    ViewBag.Title = "上架商品列表";
+}
+
+<h2>上架商品列表</h2>
+@if (ViewBag.Result != null)
+{
+    <h4 class="text-info">@ViewBag.Result</h4>
+}
+@Html.ActionLink("新增商品", "Create", "Commodity", new { @class = "btn btn-primary" })
+<table class="table">
+    <thead>
+        <tr>            
+            <td>編號</td>
+            <td>商品名稱</td>
+            <td>商品說明</td>
+            <td>價格</td>
+            <td>庫存</td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in this.Model)
+        {
+        <tr>
+            <td style="vertical-align:middle">@item.Id</td>
+            <td style="vertical-align:middle">@item.Name</td>
+            <td style="vertical-align:middle">@item.Help</td>
+            <td style="vertical-align:middle">@item.Price</td>
+            <td style="vertical-align:middle">@item.Inventory</td>
+            <td>
+                @*編輯*@
+                @Html.ActionLink("編輯", "Update", "Commodity", new { id = item.Id }, new { @class = "btn btn-info" })
+                @*刪除*@
+                @using (Html.BeginForm("Delete", "Commodity", FormMethod.Post, new { @class = "Delete" }))
+                {
+                    @Html.Hidden("Id", item.Id)
+                    <input type="submit" value="刪除" class="btn btn-danger" />
+                }
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+
+

@@ -1,0 +1,1 @@
+﻿INSERT INTO [dbo].[User](Id,Password) VALUES('acds0933','apple117')

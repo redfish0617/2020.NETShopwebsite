@@ -1,0 +1,111 @@
+﻿@model final.Models.Ship
+@{
+    ViewBag.Title = "結帳";
+    Layout = "~/Views/Shared/_LayoutDisabled.cshtml";
+    @*Layout = "~/Views/Shared/_CartPartialDisabled.cshtml";*@
+    //取得目前購物車
+    var cart = final.Models.Operation.GetCurrentCart();
+}
+<h2>結帳</h2>
+@* 列出購物車內商品讓使用者作最後確認 *@
+<table class="table">
+    <thead>
+        <tr>
+            <td>名稱</td>
+            <td>售價</td>
+            <td>數量</td>
+            <td>小記</td>
+        </tr>
+    </thead>
+    <tbody id="table">
+        @foreach (var pd in cart)
+        {
+            <tr>
+                <td>@pd.Name</td>
+                <td>@pd.Price</td>
+                <td>@pd.Quantity</td>
+                <td>@pd.Amount</td>
+            </tr>
+        }
+        <tr>
+            <td colspan="2"></td>
+            <td>總計</td>
+            <td>@cart.TotalAmount</td>
+        </tr>
+    </tbody>
+</table>
+<form action="@Url.Action("Reserve")?ItemId=@ViewBag.OrderId" name="buy" method="post">
+    @* 讓使用者填入寄送資訊 *@
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>收貨人資訊</h4>
+        <hr />
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ReceiverName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ReceiverName, new { htmlAttributes = new { @class = "form-control", @id = "rename" } })
+                @Html.ValidationMessageFor(model => model.ReceiverName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ReceiverAddress, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ReceiverAddress, new { htmlAttributes = new { @class = "form-control", @id = "readd" } })
+                @Html.ValidationMessageFor(model => model.ReceiverAddress, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @*訂單ID表格隱藏*@
+        @Html.TextBoxFor(model => model.OrderID, new { @Value = ViewBag.OrderId, @type = "hidden" })
+
+        @if (cart.Count == 0)
+        {
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="確定購買" id="send" class="btn btn-success" disabled />
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="確定購買" id="sends" class="btn btn-success" />
+                </div>
+            </div>
+        }
+    </div>
+    }
+</form>
+
+
+<script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
+@*訂單建立傳送LineNotify*@
+@section scripts{
+    <script>
+                $(document).ready(function () {
+                    $('#sends').on("click", function () {
+                        if ($('#rename').val() != "" && $('#readd').val() != "")
+                        {
+                            $.ajax({
+                                url: '@Url.Action("SendMessage")',
+                                type: 'POST',
+                                contentType: "application/json",
+                                cache: false,
+                                dataType: "html",
+                                data: "{ Message:'" + "訂單編號" + "@ViewBag.OrderId" + "建立成功" + "'}",
+                                async: false,
+                                success: alert('訂單編號:' + '@ViewBag.OrderId' + '建立成功')
+                            })
+                        }
+                        else
+                        {
+                            alert("下單失敗")
+                        }
+                    })
+                })
+    </script>
+}
+

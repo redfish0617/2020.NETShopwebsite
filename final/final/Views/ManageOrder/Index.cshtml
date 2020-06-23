@@ -1,0 +1,42 @@
+﻿@*view要引用model*@
+@model List<final.Models.Order>
+@*view要引用model*@
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>訂單列表</h2>
+
+@using (Html.BeginForm("Index", "ManageOrder"))
+{
+    @Html.TextBox("Id", null, new { @class = "btn-info" })
+    <input type="submit" value="搜尋" class="btn btn-default" />
+}
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <td>訂單編號</td>
+            <td>是否出貨</td>
+            <td></td>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.State</td>
+                <td>
+                    @Html.ActionLink("訂單明細", "Detail", "ManageOrder", new { id = item.Id }, new { @class = "btn btn-default" })
+                </td>
+            </tr>
+        }
+    </tbody>
+
+
+</table>
+
